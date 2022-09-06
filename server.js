@@ -3,12 +3,11 @@ import dotenv from 'dotenv';
 import bootcampsRoutes from './routes/bootcampsRoutes.js';
 
 dotenv.config({ path: './config/config.env' });
-console.log(process.env.PORT);
 const PORT = process.env.PORT || 5000;
 
 const app = express();
 
-app.get('/', (req, res) => res.send(`API running on ${PORT}`));
+app.get('/', (req, res) => res.send(`API is running on ${PORT}`));
 app.use('/api/v1/bootcamps', bootcampsRoutes);
 
 app.listen(
