@@ -10,6 +10,7 @@ connectDB();
 const PORT = process.env.PORT || 5000;
 
 const app = express();
+app.use(express.json());
 
 // Dev logging middleware
 if (process.env.NODE_ENV === 'development') {

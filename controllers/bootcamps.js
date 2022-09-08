@@ -10,8 +10,14 @@ export const getBootcamps = (req, res) => {
 // @desc Create new bootcamp
 // @route POST /api/v1/bootcamps
 // Private
-export const createBootcamp = (req, res) => {
-  res.status(200).json({ success: true, msg: 'Create new bootcamp' });
+export const createBootcamp = async (req, res) => {
+  try {
+    const bootcamp = await Bootcamp.create(req.body);
+
+    res.status(201).json({ success: true, data: bootcamp });
+  } catch (error) {
+    res.status(400).json({ success: false });
+  }
 };
 
 // @desc Get bootcamp by Id
