@@ -1,3 +1,5 @@
+import Bootcamp from '../models/Bootcamp.js';
+
 // @desc Get all bootcamps
 // @route GET /api/v1/bootcamps
 // Public
