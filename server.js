@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import bootcampsRoutes from './routes/bootcampsRoutes.js';
 import morgan from 'morgan';
 import connectDB from './config/db.js';
+import errorHandler from './middleware/error.js';
 
 dotenv.config({ path: './config/config.env' });
 connectDB();
@@ -19,6 +20,8 @@ if (process.env.NODE_ENV === 'development') {
 
 app.get('/', (req, res) => res.send(`API is running on ${PORT}`));
 app.use('/api/v1/bootcamps', bootcampsRoutes);
+
+app.use(errorHandler);
 
 app.listen(
   PORT,

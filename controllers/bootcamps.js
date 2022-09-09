@@ -17,20 +17,21 @@ export const getBootcamps = async (req, res) => {
 // @desc Create new bootcamp
 // @route POST /api/v1/bootcamps
 // Private
-export const createBootcamp = async (req, res) => {
+export const createBootcamp = async (req, res, next) => {
   try {
     const bootcamp = await Bootcamp.create(req.body);
 
     res.status(201).json({ success: true, data: bootcamp });
   } catch (error) {
-    res.status(400).json({ success: false });
+    next(error);
+    // res.status(400).json({ success: false });
   }
 };
 
 // @desc Get bootcamp by Id
 // @route GET /api/v1/bootcamps/:id
 // Public
-export const getBootcamp = async (req, res) => {
+export const getBootcamp = async (req, res, next) => {
   try {
     const bootcamp = await Bootcamp.findById(req.params.id);
 
@@ -40,7 +41,8 @@ export const getBootcamp = async (req, res) => {
 
     res.status(200).json({ success: true, data: bootcamp });
   } catch (error) {
-    res.status(400).json({ success: false });
+    next(error);
+    // res.status(400).json({ success: false });
   }
 };
 
