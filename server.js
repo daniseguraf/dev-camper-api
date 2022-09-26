@@ -1,6 +1,7 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import morgan from 'morgan';
+import chalk from 'chalk';
 
 import connectDB from './config/db.js';
 import bootcampsRoutes from './routes/bootcamps.js';
@@ -26,5 +27,9 @@ app.use(errorHandler);
 
 app.listen(
   PORT,
-  console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`)
+  console.log(
+    chalk.magenta(
+      `Server running in ${process.env.NODE_ENV} mode on port ${PORT}`
+    )
+  )
 );
