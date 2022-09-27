@@ -3,6 +3,7 @@ import chalk from 'chalk';
 
 const connectDB = async () => {
   try {
+    console.log(process.env.MONGO_URI);
     const conn = await mongoose.connect(process.env.MONGO_URI, {});
 
     console.log(
