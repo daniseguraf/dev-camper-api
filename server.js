@@ -5,6 +5,7 @@ import chalk from 'chalk';
 
 import connectDB from './config/db.js';
 import bootcampsRoutes from './routes/bootcamps.js';
+import coursesRoutes from './routes/courses.js';
 import errorHandler from './middleware/error.js';
 
 dotenv.config({ path: './config/config.env' });
@@ -22,6 +23,7 @@ if (process.env.NODE_ENV === 'development') {
 
 app.get('/', (req, res) => res.send(`API is running on ${PORT} 🚀`));
 app.use('/api/v1/bootcamps', bootcampsRoutes);
+app.use('/api/v1/courses', coursesRoutes);
 
 app.use(errorHandler);
 
