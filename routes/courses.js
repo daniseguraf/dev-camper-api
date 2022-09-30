@@ -7,10 +7,9 @@ import {
   // deleteCourse,
 } from '../controllers/courses.js';
 
-const router = express.Router();
+const router = express.Router({ mergeParams: true });
 
 router.route('/').get(getCourses);
-
 // router.route('/:id').get(getCourse).put(updateCourse).delete(deleteCourse);
 
 export default router;
