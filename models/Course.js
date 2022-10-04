@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import slugify from 'slugify';
+import chalk from 'chalk';
 
 const CourseSchema = mongoose.Schema({
   title: {
@@ -39,6 +40,34 @@ const CourseSchema = mongoose.Schema({
     ref: 'Bootcamp',
     required: true,
   },
+});
+
+// Static method to get avg of course tuitions
+CourseSchema.statics.getAverageCost = async function (bootcampId) {
+  console.log(chalk.blue('Calculating avg cost...'));
+
+  const obj = await this.aggregate([
+    { $match: { bootcamp: bootcampId } },
+    { $group: { _id: '$bootcamp', averageCost: { $avg: '$tuition' } } },
+  ]);
+
+  try {
+    await this.model('Bootcamp').findByIdAndUpdate(bootcampId, {
+      averageCost: Math.ceil(obj[0].averageCost / 10) * 10,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+// Call getAverageCost after save
+CourseSchema.post('save', function () {
+  this.constructor.getAverageCost(this.bootcamp);
+});
+
+// Call getAverageCost before remove
+CourseSchema.pre('remove', function () {
+  this.constructor.getAverageCost(this.bootcamp);
 });
 
 const Course = mongoose.model('Course', CourseSchema);
