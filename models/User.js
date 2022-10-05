@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
 
 const UserSchema = new mongoose.Schema({
   name: {
@@ -40,6 +41,13 @@ UserSchema.pre('save', function () {
   const hash = bcrypt.hashSync(this.password, salt);
   this.password = hash;
 });
+
+// Sign JWT and return
+UserSchema.methods.getSignedJwtToken = function () {
+  return jwt.sign({ id: this._id }, process.env.JWT_SECRET, {
+    expiresIn: process.env.JWT_EXPIRE,
+  });
+};
 
 const User = mongoose.model('User', UserSchema);
 
