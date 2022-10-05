@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import bcrypt from 'bcryptjs';
 
 const UserSchema = new mongoose.Schema({
   name: {
@@ -31,6 +32,13 @@ const UserSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+});
+
+// Middleware for encrypt psssword
+UserSchema.pre('save', function () {
+  const salt = bcrypt.genSaltSync(10);
+  const hash = bcrypt.hashSync(this.password, salt);
+  this.password = hash;
 });
 
 const User = mongoose.model('User', UserSchema);
