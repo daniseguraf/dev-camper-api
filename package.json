@@ -11,9 +11,12 @@
   "author": "Daniel Segura",
   "license": "MIT",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "chalk": "^5.0.1",
     "dotenv": "^16.0.2",
     "express": "^4.18.1",
+    "express-fileupload": "^1.4.0",
+    "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.5.5",
     "morgan": "^1.10.0",
     "node-geocoder": "^4.2.0",
