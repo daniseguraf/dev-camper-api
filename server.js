@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import morgan from 'morgan';
 import chalk from 'chalk';
 import fileupload from 'express-fileupload';
+import cookieParser from 'cookie-parser';
 
 import connectDB from './config/db.js';
 import bootcampsRoutes from './routes/bootcamps.js';
@@ -16,7 +17,12 @@ connectDB();
 const PORT = process.env.PORT || 5000;
 
 const app = express();
+
+// Body parser
 app.use(express.json());
+
+// Cookie parser
+app.use(cookieParser());
 
 // Dev logging middleware
 if (process.env.NODE_ENV === 'development') {
