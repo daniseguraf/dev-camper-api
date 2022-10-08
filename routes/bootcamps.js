@@ -10,21 +10,22 @@ import {
 } from '../controllers/bootcamps.js';
 // Include other resource routers
 import courseRouter from './courses.js';
+import { protect } from '../middleware/auth.js';
 
 const router = express.Router();
 
 // Re-route into other resource routers
 router.use('/:bootcampId/courses', courseRouter);
 
-router.route('/').get(getBootcamps).post(createBootcamp);
+router.route('/').get(getBootcamps).post(protect, createBootcamp);
 
 router
   .route('/:id')
   .get(getBootcamp)
-  .put(updateBootcamp)
-  .delete(deleteBootcamp);
+  .put(protect, updateBootcamp)
+  .delete(protect, deleteBootcamp);
 
-router.route('/:id/photo').put(uploadPhotoBootcamp);
+router.route('/:id/photo').put(protect, uploadPhotoBootcamp);
 
 router.route('/radius/:zipcode/:distance').get(getBootcampsInRadius);
 
