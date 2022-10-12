@@ -5,6 +5,7 @@ import chalk from 'chalk';
 import dotenv from 'dotenv';
 import Bootcamp from './models/Bootcamp.js';
 import Course from './models/Course.js';
+import User from './models/User.js';
 
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 
@@ -23,11 +24,16 @@ const courses = JSON.parse(
   fs.readFileSync(`${__dirname}/_data/courses.json`, 'utf-8')
 );
 
+const users = JSON.parse(
+  fs.readFileSync(`${__dirname}/_data/users.json`, 'utf-8')
+);
+
 // Import into DB
 const importData = async () => {
   try {
     await Bootcamp.create(bootcamps);
     await Course.create(courses);
+    await User.create(users);
 
     console.log(chalk.green('Data Imported 🎉'));
     process.exit();
@@ -41,6 +47,7 @@ const deleteData = async () => {
   try {
     await Bootcamp.deleteMany();
     await Course.deleteMany();
+    await User.deleteMany();
 
     console.log(chalk.red('Data Destroyed 💥'));
     process.exit();
