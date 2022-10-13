@@ -106,7 +106,6 @@ export const createBootcamp = async (req, res, next) => {
   req.body.user = req.user.id;
 
   const publishedBootcamp = await Bootcamp.findOne({ user: req.user.id });
-  console.log(publishedBootcamp);
 
   // If the user is not an admin, they can only add one bootcamp
   if (publishedBootcamp && req.user.role !== 'admin') {
@@ -127,43 +126,67 @@ export const createBootcamp = async (req, res, next) => {
 // @route     PUT /api/v1/bootcamps/:id
 // @access    Private
 export const updateBootcamp = async (req, res, next) => {
-  try {
-    const bootcamp = await Bootcamp.findByIdAndUpdate(req.params.id, req.body, {
+  const bootcamp = await Bootcamp.findById(req.params.id);
+
+  if (!bootcamp) {
+    return next(
+      new ErrorResponse(`Bootcamp not found with id of ${req.params.id}`, 404)
+    );
+  }
+
+  // Get user ID asociated with Bootcamp in DB
+  const user = bootcamp.user.toString();
+
+  // Compare with current logged in user
+  if (user !== req.user.id && req.user.role !== 'admin') {
+    return next(
+      new ErrorResponse(
+        `The user ${req.user.id} does not have permissions to update this bootcamp`,
+        404
+      )
+    );
+  }
+
+  const updatedBootcamp = await Bootcamp.findByIdAndUpdate(
+    req.params.id,
+    req.body,
+    {
       new: true,
       runValidators: true,
-    });
-
-    if (!bootcamp) {
-      return next(
-        new ErrorResponse(`Bootcamp not found with id of ${req.params.id}`, 404)
-      );
     }
+  );
 
-    res.status(200).json({ success: true, data: bootcamp });
-  } catch (error) {
-    next(error);
-  }
+  res.status(200).json({ success: true, data: updatedBootcamp });
 };
 
 // @desc      Delete bootcamp
 // @route     DELETE /api/v1/bootcamps/:id
 // @access    Private
 export const deleteBootcamp = async (req, res, next) => {
-  try {
-    const bootcamp = await Bootcamp.findById(req.params.id);
+  const bootcamp = await Bootcamp.findById(req.params.id);
 
-    if (!bootcamp) {
-      return next(
-        new ErrorResponse(`Bootcamp not found with id of ${req.params.id}`, 404)
-      );
-    }
-
-    await bootcamp.remove();
-
-    res.status(200).json({ success: true, data: {} });
-  } catch (error) {
-    next(error);
+  if (!bootcamp) {
+    return next(
+      new ErrorResponse(`Bootcamp not found with id of ${req.params.id}`, 404)
+    );
   }
+
+  // Get user ID asociated with Bootcamp in DB
+  const user = bootcamp.user.toString();
+
+  // Compare with current logged in user
+  if (user !== req.user.id && req.user.role !== 'admin') {
+    return next(
+      new ErrorResponse(
+        `The user ${req.user.id} does not have permissions of removing the bootcamp`,
+        404
+      )
+    );
+  }
+
+  await bootcamp.remove();
+
+  res.status(200).json({ success: true, data: {} });
 };
 
 // @desc      Get bootcamps within a radius
@@ -204,6 +227,19 @@ export const uploadPhotoBootcamp = async (req, res, next) => {
   if (!bootcamp) {
     return next(
       new ErrorResponse(`Bootcamp not found with id of ${req.params.id}`, 404)
+    );
+  }
+
+  // Get user ID asociated with Bootcamp in DB
+  const user = bootcamp.user.toString();
+
+  // Compare with current logged in user
+  if (user !== req.user.id && req.user.role !== 'admin') {
+    return next(
+      new ErrorResponse(
+        `The user ${req.user.id} does not have permissions to update this bootcamp`,
+        404
+      )
     );
   }
 
