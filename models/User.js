@@ -36,7 +36,7 @@ const UserSchema = new mongoose.Schema({
   },
 });
 
-// Middleware for encrypt password
+// Encrypt password middleware
 UserSchema.pre('save', async function (next) {
   if (!this.isModified('password')) {
     next();
