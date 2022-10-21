@@ -48,11 +48,15 @@ UserSchema.pre('save', async function (next) {
   this.password = hash;
 });
 
-// Sign JWT and return
+// Generate JWT and return
 UserSchema.methods.getSignedJwtToken = function () {
-  return jwt.sign({ id: this._id }, process.env.JWT_SECRET, {
-    expiresIn: process.env.JWT_EXPIRE,
-  });
+  return jwt.sign(
+    { id: this._id, name: this.name, email: this.email },
+    process.env.JWT_SECRET,
+    {
+      expiresIn: process.env.JWT_EXPIRE,
+    }
+  );
 };
 
 // Match password
