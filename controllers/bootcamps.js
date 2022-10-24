@@ -105,6 +105,7 @@ export const createBootcamp = async (req, res, next) => {
   // Add user to req.body
   req.body.user = req.user.id;
 
+  // check for published bootcamo
   const publishedBootcamp = await Bootcamp.findOne({ user: req.user.id });
 
   // If the user is not an admin, they can only add one bootcamp
@@ -112,7 +113,7 @@ export const createBootcamp = async (req, res, next) => {
     return next(
       new ErrorResponse(
         `The user with ID ${req.user.id} has already published a bootcamp`,
-        404
+        400
       )
     );
   }
